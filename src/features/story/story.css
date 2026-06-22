@@ -1,0 +1,81 @@
+/* ---- Nucleo visual del sector (construido con CSS) ---- */
+.visual-core {
+  width: var(--size);
+  height: var(--size);
+  border-radius: 42% 58% 57% 43% / 45% 39% 61% 55%;
+  background: radial-gradient(
+    circle at 32% 28%,
+    color-mix(in srgb, var(--accent) 85%, white),
+    var(--accent) 60%,
+    color-mix(in srgb, var(--accent) 70%, black)
+  );
+  box-shadow: 0 0 90px color-mix(in srgb, var(--accent) 60%, transparent);
+  transition: width 0.6s ease, height 0.6s ease, background 0.6s ease;
+  animation: core-morph 9s ease-in-out infinite alternate;
+}
+
+@keyframes core-morph {
+  0% {
+    border-radius: 42% 58% 57% 43% / 45% 39% 61% 55%;
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    border-radius: 58% 42% 40% 60% / 55% 58% 42% 45%;
+    transform: rotate(12deg) scale(1.05);
+  }
+}
+
+.visual-ring {
+  position: absolute;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.22;
+  animation: ring-pulse 4s ease-in-out infinite;
+  animation-delay: calc(var(--ring) * 0.4s);
+}
+
+@keyframes ring-pulse {
+  0%,
+  100% {
+    transform: scale(0.95);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.3;
+  }
+}
+
+/* ---- Barra de progreso del recorrido ---- */
+/* Por defecto (fallback): el ancho lo controla JS via --progress. */
+.journey-bar {
+  transform-origin: left center;
+  width: calc(var(--progress, 0) * 100%);
+  transition: width 0.4s ease;
+}
+
+/* Cuando el navegador soporta scroll-driven animations, la barra se
+   vincula directamente al scroll del documento (independiente de JS). */
+@supports (animation-timeline: scroll()) {
+  .journey-bar {
+    width: 100%;
+    transform: scaleX(0);
+    animation: journey-grow linear both;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes journey-grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-core,
+  .visual-ring {
+    animation: none;
+  }
+}
