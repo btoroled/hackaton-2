@@ -1,3 +1,6 @@
+import { useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
+import { SignalDetailDrawer } from "./SignalDetailDrawer";
 import { SignalFilters } from "./SignalFilters";
 import { SignalsList } from "./SignalsList";
 import { useSignalsFeedUrlState } from "./signalsFeedQuery";
@@ -6,6 +9,36 @@ import { useSignalsFeed } from "./useSignalsFeed";
 export function SignalsFeedPage() {
   const controls = useSignalsFeedUrlState();
   const feed = useSignalsFeed(controls.filters);
+
+  // El detalle se abre como panel sobre el feed (el feed sigue montado:
+  // conserva scroll y paginas). El id seleccionado vive en la URL (?signal=).
+  const [params, setParams] = useSearchParams();
+  const selectedId = params.get("signal");
+
+  const openDetail = useCallback(
+    (id: string) => {
+      setParams(
+        (current) => {
+          const next = new URLSearchParams(current);
+          next.set("signal", id);
+          return next;
+        },
+        { replace: false }, // permite volver con el boton atras
+      );
+    },
+    [setParams],
+  );
+
+  const closeDetail = useCallback(() => {
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.delete("signal");
+        return next;
+      },
+      { replace: false },
+    );
+  }, [setParams]);
 
   return (
     <section>
@@ -27,7 +60,16 @@ export function SignalsFeedPage() {
         onReachEnd={feed.loadMore}
         onRetryInitial={feed.retryInitial}
         onRetryMore={feed.retryMore}
+        onOpenSignal={openDetail}
       />
+
+      {selectedId && (
+        <SignalDetailDrawer
+          signalId={selectedId}
+          onClose={closeDetail}
+          onUpdated={feed.updateSignal}
+        />
+      )}
     </section>
   );
 }

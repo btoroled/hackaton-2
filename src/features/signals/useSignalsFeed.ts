@@ -47,6 +47,7 @@ export interface SignalsFeed {
   loadMore: () => void;
   retryInitial: () => void;
   retryMore: () => void;
+  updateSignal: (updated: Signal) => void;
 }
 
 export function useSignalsFeed(filters: SignalsFilters): SignalsFeed {
@@ -162,6 +163,20 @@ export function useSignalsFeed(filters: SignalsFilters): SignalsFeed {
     fetchPage(s.cursor, "more");
   }, [fetchPage]);
 
+  // Reemplaza un item del feed con su version actualizada (tras un PATCH),
+  // sin recargar paginas ni perder la posicion de scroll.
+  const updateSignal = useCallback((updated: Signal) => {
+    setState((prev) => {
+      if (!prev.itemIds.has(updated.id)) return prev;
+      return {
+        ...prev,
+        items: prev.items.map((it) =>
+          it.id === updated.id ? updated : it,
+        ),
+      };
+    });
+  }, []);
+
   return {
     items: state.items,
     hasMore: state.hasMore,
@@ -171,5 +186,6 @@ export function useSignalsFeed(filters: SignalsFilters): SignalsFeed {
     loadMore,
     retryInitial,
     retryMore,
+    updateSignal,
   };
 }

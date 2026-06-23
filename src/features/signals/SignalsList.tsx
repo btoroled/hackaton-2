@@ -12,6 +12,7 @@ interface Props {
   onReachEnd: () => void;
   onRetryInitial: () => void;
   onRetryMore: () => void;
+  onOpenSignal: (id: string) => void;
 }
 
 export function SignalsList({
@@ -23,6 +24,7 @@ export function SignalsList({
   onReachEnd,
   onRetryInitial,
   onRetryMore,
+  onOpenSignal,
 }: Props) {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const onReachEndRef = useRef(onReachEnd);
@@ -98,7 +100,7 @@ export function SignalsList({
       <ul className="space-y-3">
         {items.map((sig) => (
           <li key={sig.id}>
-            <SignalCard signal={sig} />
+            <SignalCard signal={sig} onOpen={onOpenSignal} />
           </li>
         ))}
       </ul>
