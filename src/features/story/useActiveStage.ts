@@ -24,27 +24,31 @@ export function useActiveStage(count: number): UseActiveStage {
     );
     if (sections.length === 0) return;
 
-    const visibility = new Map<Element, number>();
+    const indexOf = new Map<Element, number>();
+    sections.forEach((el, i) => indexOf.set(el, i));
+
+    // Secciones que cruzan la linea central del viewport.
+    const intersecting = new Set<number>();
 
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          visibility.set(entry.target, entry.intersectionRatio);
+          const i = indexOf.get(entry.target);
+          if (i === undefined) continue;
+          if (entry.isIntersecting) intersecting.add(i);
+          else intersecting.delete(i);
         }
-        let bestIndex = 0;
-        let bestRatio = -1;
-        sections.forEach((el, i) => {
-          const ratio = visibility.get(el) ?? 0;
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            bestIndex = i;
-          }
-        });
-        setActive(bestIndex);
+        // La etapa activa es la seccion que pasa por el centro. Si hay varias
+        // (transicion entre secciones), tomamos la mas avanzada.
+        if (intersecting.size > 0) {
+          setActive(Math.max(...intersecting));
+        }
       },
       {
-        rootMargin: "-45% 0px -45% 0px",
-        threshold: [0, 0.25, 0.5, 0.75, 1],
+        // Root colapsado a una linea horizontal en el centro de la pantalla:
+        // exactamente la seccion que cruza el centro queda "intersecting".
+        rootMargin: "-50% 0px -50% 0px",
+        threshold: 0,
       },
     );
 
