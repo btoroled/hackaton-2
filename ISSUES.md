@@ -16,33 +16,33 @@
 - **Depende de:** —
 - **Descripción:** Formulario que envía `teamCode`, `email`, `password` a `POST /auth/login`. Guardar el `token` y `expiresAt` (localStorage). Manejar credenciales inválidas.
 - **Criterios de aceptación:**
-  - [ ] Login exitoso redirige a `/dashboard`.
-  - [ ] Credenciales inválidas muestran error sin romper el layout.
-  - [ ] El token se persiste y se adjunta como `Authorization: Bearer <token>`.
+  - [X] Login exitoso redirige a `/dashboard`.
+  - [X] Credenciales inválidas muestran error sin romper el layout.
+  - [X] El token se persiste y se adjunta como `Authorization: Bearer <token>`.
 
 ### #2 — Ruta privada + layout base
 - **Labels:** `cp1` `frontend`
 - **Depende de:** #1
 - **Descripción:** `PrivateRoute` que protege `/dashboard` y demás rutas. Layout con navbar y botón de logout.
 - **Criterios de aceptación:**
-  - [ ] Abrir `/dashboard` sin sesión redirige a `/login`.
-  - [ ] Logout limpia el token y vuelve a `/login`.
+  - [X] Abrir `/dashboard` sin sesión redirige a `/login`.
+  - [X] Logout limpia el token y vuelve a `/login`.
 
 ### #3 — Restauración de sesión
 - **Labels:** `cp1` `frontend`
 - **Depende de:** #1
 - **Descripción:** Al cargar la app, si hay token, llamar a `GET /auth/me` para restaurar la sesión.
 - **Criterios de aceptación:**
-  - [ ] Recargar en una ruta privada mantiene la sesión.
-  - [ ] Token expirado/ inválido fuerza logout.
+  - [X] Recargar en una ruta privada mantiene la sesión.
+  - [X] Token expirado/ inválido fuerza logout.
 
 ### #4 — Dashboard con datos reales
 - **Labels:** `cp1` `frontend`
 - **Depende de:** #2, #3
 - **Descripción:** Consumir `GET /dashboard/summary` y mostrar KPIs (totalTropels, criticalTropels, openSignals, sectorStabilityAvg, signalsBySeverity).
 - **Criterios de aceptación:**
-  - [ ] Estados de loading, error y vacío implementados.
-  - [ ] Sin datos hardcodeados.
+  - [X] Estados de loading, error y vacío implementados.
+  - [X] Sin datos hardcodeados.
 
 ### #5 — Deploy inicial
 - **Labels:** `cp1` `infra`
@@ -61,31 +61,31 @@
 - **Depende de:** #1
 - **Descripción:** Consumir `GET /tropels` con `page` (inicia en 0) y `size` (10/20/50). Renderizar `content`, `totalPages`, `currentPage`.
 - **Criterios de aceptación:**
-  - [ ] Paginación real del servidor (no cliente).
-  - [ ] Controles de página y tamaño funcionando.
+  - [X] Paginación real del servidor (no cliente).
+  - [X] Controles de página y tamaño funcionando.
 
 ### #7 — Filtros, búsqueda y ordenamiento
 - **Labels:** `cp2` `frontend`
 - **Depende de:** #6
 - **Descripción:** Filtros combinables `species`, `vitalState`, `sectorId`, búsqueda `q` y `sort` (`name,asc` / `updatedAt,desc` / `chaosIndex,desc`).
 - **Criterios de aceptación:**
-  - [ ] Filtros combinables entre sí.
-  - [ ] Cambiar filtro resetea a `page=0`.
+  - [X] Filtros combinables entre sí.
+  - [X] Cambiar filtro resetea a `page=0`.
 
 ### #8 — Estado sincronizado con la URL
 - **Labels:** `cp2` `frontend`
 - **Depende de:** #7
 - **Descripción:** Reflejar todo el estado (página, filtros, sort, q) en la URL con `useSearchParams`. Restaurar al recargar o compartir.
 - **Criterios de aceptación:**
-  - [ ] Copiar la URL en otra pestaña reproduce el mismo estado.
-  - [ ] Loading/error/sin resultados no mueven el layout.
+  - [X] Copiar la URL en otra pestaña reproduce el mismo estado.
+  - [X] Loading/error/sin resultados no mueven el layout.
 
 ### #9 — Protección contra respuestas obsoletas
 - **Labels:** `cp2` `frontend`
 - **Depende de:** #6, #7
 - **Descripción:** Cancelar/descartar requests viejas (AbortController o token de versión) para que no pinten resultados tardíos.
 - **Criterios de aceptación:**
-  - [ ] Cambiar filtros y página rápido nunca muestra resultados de una request anterior.
+  - [X] Cambiar filtros y página rápido nunca muestra resultados de una request anterior.
 
 ---
 
@@ -97,31 +97,31 @@
 - **Depende de:** #1
 - **Descripción:** `GET /signals/feed` con `limit` (default 15, máx 30). Usar `items`, `nextCursor`, `hasMore`.
 - **Criterios de aceptación:**
-  - [ ] Primera página renderiza correctamente.
+  - [X] Primera página renderiza correctamente.
 
 ### #11 — Infinite scroll
 - **Labels:** `cp3` `frontend`
 - **Depende de:** #10
 - **Descripción:** Carga automática al llegar al final (Intersection Observer). Una sola carga adicional en vuelo. Fin de lista cuando `hasMore=false`.
 - **Criterios de aceptación:**
-  - [ ] No hay botón "Cargar más".
-  - [ ] Network nunca muestra dos cargas simultáneas.
+  - [X] No hay botón "Cargar más".
+  - [X] Network nunca muestra dos cargas simultáneas.
 
 ### #12 — Deduplicación + filtros en URL
 - **Labels:** `cp3` `frontend`
 - **Depende de:** #11
 - **Descripción:** Dedup por ID al concatenar páginas. Filtros (`signalType`, `severity`, `status`, `q`) persistidos en URL; cambiar filtro reinicia el cursor.
 - **Criterios de aceptación:**
-  - [ ] No aparecen IDs repetidos.
-  - [ ] Cambiar filtro con request en vuelo descarta la respuesta vieja.
+  - [X] No aparecen IDs repetidos.
+  - [X] Cambiar filtro con request en vuelo descarta la respuesta vieja.
 
 ### #13 — Recuperación de error
 - **Labels:** `cp3` `frontend`
 - **Depende de:** #11
 - **Descripción:** Si falla una página posterior, mostrar reintento sin borrar las páginas ya cargadas.
 - **Criterios de aceptación:**
-  - [ ] Error en página N conserva páginas 0..N-1.
-  - [ ] Botón de reintento recupera el feed.
+  - [X] Error en página N conserva páginas 0..N-1.
+  - [X] Botón de reintento recupera el feed.
 
 ---
 
@@ -161,45 +161,45 @@
 - **Depende de:** #1
 - **Descripción:** `GET /sectors/:id/story`. Tipar estrictamente las 8 etapas (`stageOrder`, `title`, `narrative`, `metrics`, `assetKey`, `colorToken`, `progress`). Sin `any`.
 - **Criterios de aceptación:**
-  - [ ] 8 etapas ordenadas por `stageOrder`.
+  - [X] 8 etapas ordenadas por `stageOrder`.
 
 ### #18 — Estructura de scrollytelling
 - **Labels:** `cp5` `frontend`
 - **Depende de:** #17
 - **Descripción:** Secciones disparadas por scroll que determinan la etapa activa (Intersection Observer). Indicador de progreso del recorrido.
 - **Criterios de aceptación:**
-  - [ ] La etapa activa cambia al hacer scroll.
-  - [ ] No es una lista de cards con animación decorativa.
+  - [X] La etapa activa cambia al hacer scroll.
+  - [X] No es una lista de cards con animación decorativa.
 
 ### #19 — Visual persistente
 - **Labels:** `cp5` `frontend`
 - **Depende de:** #18
 - **Descripción:** Panel visual sticky construido con CSS/`colorToken`/`assetKey` que cambia con la etapa activa y muestra las métricas correspondientes.
 - **Criterios de aceptación:**
-  - [ ] Las métricas mostradas corresponden a la etapa activa.
-  - [ ] Sin video, GIF ni canvas pregrabado.
+  - [X] Las métricas mostradas corresponden a la etapa activa.
+  - [X] Sin video, GIF ni canvas pregrabado.
 
 ### #20 — CSS Scroll-driven Animations
 - **Labels:** `cp5` `frontend`
 - **Depende de:** #18
 - **Descripción:** Usar scroll-driven animations cuando exista soporte; fallback funcional con JS/IntersectionObserver cuando no.
 - **Criterios de aceptación:**
-  - [ ] Funciona con y sin soporte de la API.
+  - [X] Funciona con y sin soporte de la API.
 
 ### #21 — View Transition API
 - **Labels:** `cp5` `frontend`
 - **Depende de:** #19
 - **Descripción:** Transición entre resumen e historia con View Transition API; fallback funcional sin soporte.
 - **Criterios de aceptación:**
-  - [ ] Transición suave donde hay soporte; navegación equivalente donde no.
+  - [X] Transición suave donde hay soporte; navegación equivalente donde no.
 
 ### #22 — Accesibilidad: reduced motion + teclado
 - **Labels:** `cp5` `frontend`
 - **Depende de:** #20, #21
 - **Descripción:** Respetar `prefers-reduced-motion`. Navegación completa por teclado sin perder contenido. Comportamiento equivalente desktop/mobile.
 - **Criterios de aceptación:**
-  - [ ] Con reduced motion no hay animaciones que mareen, pero el contenido sigue accesible.
-  - [ ] Recorrido completo navegable por teclado.
+  - [X] Con reduced motion no hay animaciones que mareen, pero el contenido sigue accesible.
+  - [X] Recorrido completo navegable por teclado.
 
 ---
 
