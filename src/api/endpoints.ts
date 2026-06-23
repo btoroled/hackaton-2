@@ -5,6 +5,7 @@ import type {
   LoginRequest,
   LoginResponse,
   SectorListResponse,
+  SectorStoryResponse,
   Signal,
   SignalFeedQuery,
   SignalFeedResponse,
@@ -91,4 +92,11 @@ export function getSectors(
   signal?: AbortSignal,
 ): Promise<SectorListResponse> {
   return apiRequest<SectorListResponse>("/sectors", { signal });
+}
+
+export function getSectorStory(
+  id: string,
+  signal?: AbortSignal,
+): Promise<SectorStoryResponse> {
+  return apiRequest<SectorStoryResponse>(`/sectors/${id}/story`, { signal });
 }
