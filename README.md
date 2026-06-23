@@ -34,10 +34,14 @@ npm run preview    # servir el build de producción localmente
 
 ## Variables de entorno
 
-La app necesita **una sola variable**. Crea un archivo `.env` en la raíz:
-
+Variables de entorno:
+VITE_API_BASE_URL=https://hackaton-20261-front-587720740455.us-east1.run.app/
+API_DOCUMENTATION_URL=https://hackaton-20261-front-587720740455.us-east1.run.app/docs/
+TEAM_CODE=TEAM-1998
+EMAIL=operator@tuckersoft.com
+PASSWORD=Pizza-TEAM-1998
 ```properties
-VITE_API_BASE_URL=(https://hackaton-20261-front-587720740455.us-east1.run.app)
+VITE_API_BASE_URL=https://hackaton-20261-front-587720740455.us-east1.run.app
 ```
 
 - En **local** es obligatoria, o el login fallará.
@@ -47,7 +51,7 @@ VITE_API_BASE_URL=(https://hackaton-20261-front-587720740455.us-east1.run.app)
 
 ## Deploy
 
-**Link del deploy:** (https://hackaton-2-8f94.vercel.app/dashboard)
+**Link del deploy:** (https://hackaton-20261-front-587720740455.us-east1.run.app/api/v1/)
 
 El repositorio incluye configuración de **SPA rewrite** (`vercel.json`, `netlify.toml` y
 `public/_redirects`) para que **cualquier ruta** (`/dashboard`, `/signals`,
