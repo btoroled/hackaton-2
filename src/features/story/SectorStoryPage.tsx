@@ -52,7 +52,7 @@ export function SectorStoryPage() {
 function StoryView({ data }: { data: SectorStoryResponse }) {
   const { sector, stages } = data;
   const [mode, setMode] = useState<Mode>("summary");
-  const { active, setRef, scrollTo } = useActiveStage(stages.length);
+  const { active, progress, setRef, scrollTo } = useActiveStage(stages.length);
   const activeStage = stages[active];
 
   const toStory = useCallback(() => {
@@ -149,6 +149,7 @@ function StoryView({ data }: { data: SectorStoryResponse }) {
           <StoryProgress
             stages={stages}
             active={active}
+            progress={progress}
             onJump={scrollTo}
           />
         </div>
