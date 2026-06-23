@@ -37,9 +37,26 @@ function formatTime(iso: string): string {
   }
 }
 
-export function SignalCard({ signal }: { signal: Signal }) {
+export function SignalCard({
+  signal,
+  onOpen,
+}: {
+  signal: Signal;
+  onOpen: (id: string) => void;
+}) {
   return (
-    <article className="rounded-lg border border-edge bg-surface p-4 transition-colors hover:border-accent/60">
+    <article
+      role="button"
+      tabIndex={0}
+      onClick={() => onOpen(signal.id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen(signal.id);
+        }
+      }}
+      className="cursor-pointer rounded-lg border border-edge bg-surface p-4 transition-colors hover:border-accent/60 focus:outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
+    >
       <header className="mb-2 flex flex-wrap items-center gap-2">
         <span className="font-mono text-xs text-muted">{signal.id}</span>
         <Badge className="border-edge bg-bg text-text">
