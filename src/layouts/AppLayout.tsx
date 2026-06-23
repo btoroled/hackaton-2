@@ -43,6 +43,14 @@ export function AppLayout() {
               >
                 Senales
               </NavLink>
+              <NavLink
+                to="/sectors"
+                className={({ isActive }) =>
+                  `${navItem} ${isActive ? navActive : navInactive}`
+                }
+              >
+                Sectores
+              </NavLink>
             </nav>
           </div>
           <div className="flex items-center gap-4 text-sm">
