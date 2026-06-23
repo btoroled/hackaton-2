@@ -43,7 +43,9 @@ export function SignalsList({
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+    // status/hasMore controlan si el sentinel esta montado; sin estos deps el
+    // observer queda colgado de un primer render donde el sentinel aun no existia.
+  }, [status, hasMore]);
 
   const isInitialLoading = status === "loading-initial";
   const isLoadingMore = status === "loading-more";

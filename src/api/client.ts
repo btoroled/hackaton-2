@@ -2,6 +2,7 @@ import type { ApiError } from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const TOKEN_KEY = "tropelcare.token";
+const EXPIRES_KEY = "tropelcare.expiresAt";
 
 export class ApiRequestError extends Error {
   readonly status: number;
@@ -18,12 +19,18 @@ export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
 
-export function setToken(token: string): void {
+export function setToken(token: string, expiresAt?: string): void {
   localStorage.setItem(TOKEN_KEY, token);
+  if (expiresAt) localStorage.setItem(EXPIRES_KEY, expiresAt);
+}
+
+export function getExpiresAt(): string | null {
+  return localStorage.getItem(EXPIRES_KEY);
 }
 
 export function clearToken(): void {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(EXPIRES_KEY);
 }
 
 export interface RequestOptions {

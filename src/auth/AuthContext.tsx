@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { clearToken, setToken } from "../api/client";
+import { clearToken, getToken, setToken } from "../api/client";
 import { login as apiLogin, me as apiMe } from "../api/endpoints";
 import type { AuthUser, LoginRequest } from "../api/types";
 
@@ -27,13 +27,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
+    if (!getToken()) {
+      setStatus("anon");
+      return;
+    }
     const controller = new AbortController();
     apiMe(controller.signal)
       .then((u) => {
         setUser(u);
         setStatus("authed");
       })
-      .catch(() => {
+      .catch((err: unknown) => {
+        if (controller.signal.aborted) return;
+        if (err instanceof DOMException && err.name === "AbortError") return;
         clearToken();
         setUser(null);
         setStatus("anon");
@@ -43,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (body: LoginRequest) => {
     const res = await apiLogin(body);
-    setToken(res.token);
+    setToken(res.token, res.expiresAt);
     setUser(res.user);
     setStatus("authed");
   }, []);

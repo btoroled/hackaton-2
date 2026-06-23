@@ -10,7 +10,11 @@ export function DashboardPage() {
     const controller = new AbortController();
     getDashboardSummary(controller.signal)
       .then((d) => { setData(d); setStatus("ok"); })
-      .catch(() => setStatus("error"));
+      .catch((err: unknown) => {
+        if (controller.signal.aborted) return;
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        setStatus("error");
+      });
     return () => controller.abort();
   }, []);
 
