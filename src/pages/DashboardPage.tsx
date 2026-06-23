@@ -17,13 +17,13 @@ export function DashboardPage() {
   if (status === "loading") return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-pulse">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="h-24 rounded-xl bg-gray-200" />
+        <div key={i} className="h-24 rounded-xl border border-edge bg-surface" />
       ))}
     </div>
   );
 
   if (status === "error") return (
-    <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 text-sm">
+    <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-6 text-sm text-red-300">
       No se pudo cargar el resumen. Verifica tu conexión o recarga la página.
     </div>
   );
@@ -38,37 +38,37 @@ export function DashboardPage() {
   ];
 
   const severityColor: Record<string, string> = {
-    LEVE: "bg-green-100 text-green-800",
-    MODERADO: "bg-yellow-100 text-yellow-800",
-    GRAVE: "bg-orange-100 text-orange-800",
-    CRITICO: "bg-red-100 text-red-800",
+    LEVE: "border-sky-500/30 bg-sky-500/10 text-sky-300",
+    MODERADO: "border-amber-500/30 bg-amber-500/10 text-amber-300",
+    GRAVE: "border-orange-500/30 bg-orange-500/10 text-orange-300",
+    CRITICO: "border-red-500/30 bg-red-500/10 text-red-300",
   };
 
   return (
     <div className="space-y-6">
-      <h1 className="font-mono text-2xl font-semibold">Control Room</h1>
+      <h1 className="font-mono text-2xl font-semibold text-text">Control Room</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {kpis.map((k) => (
-          <div key={k.label} className="rounded-xl border bg-white p-4">
-            <p className="text-xs text-gray-400 mb-1">{k.label}</p>
-            <p className="text-3xl font-semibold">{k.value}</p>
+          <div key={k.label} className="rounded-xl border border-edge bg-surface p-4">
+            <p className="mb-1 text-xs text-muted">{k.label}</p>
+            <p className="text-3xl font-semibold text-text">{k.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="rounded-xl border bg-white p-4">
-        <p className="text-sm font-medium mb-3">Señales por severidad</p>
+      <div className="rounded-xl border border-edge bg-surface p-4">
+        <p className="mb-3 text-sm font-medium text-text">Señales por severidad</p>
         <div className="flex flex-wrap gap-2">
           {Object.entries(data.signalsBySeverity).map(([sev, count]) => (
-            <span key={sev} className={`rounded-full px-3 py-1 text-sm font-medium ${severityColor[sev] ?? "bg-gray-100 text-gray-700"}`}>
+            <span key={sev} className={`rounded-full border px-3 py-1 text-sm font-medium ${severityColor[sev] ?? "border-edge bg-bg text-muted"}`}>
               {sev}: {count}
             </span>
           ))}
         </div>
       </div>
 
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-muted">
         Actualizado: {new Date(data.generatedAt).toLocaleString()}
       </p>
     </div>
