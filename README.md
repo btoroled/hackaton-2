@@ -9,11 +9,10 @@ cerrada y determinística.
 
 | Nombre | Código | Responsable de |
 |--------|--------|----------------|
-| <!-- Nombre completo --> | <!-- Código --> | Checkpoint 1 (auth, dashboard, deploy) |
-| <!-- Nombre completo --> | <!-- Código --> | Checkpoints 2 y 3 (Tropeles, feed) |
-| Jobeth Alexander León | <!-- Código --> | Checkpoint 4 (atender Señal) + Checkpoint 5 (Story) |
+| Miguel Rodriguez Arias | 202320226 | Checkpoint 1 (auth, dashboard, deploy) |
+| Benjamin Toro Leddihn | 202510596 | Checkpoints 2 y 3 (Tropeles, feed) |
+| Jobeth Alexander León Pantaleon| 202510035 | Checkpoint 4 (atender Señal) + Checkpoint 5 (Story) |
 
-> _Completar nombres y códigos. Ajustar la columna "Responsable de" según el reparto real._
 
 ## Stack
 
@@ -38,7 +37,7 @@ npm run preview    # servir el build de producción localmente
 La app necesita **una sola variable**. Crea un archivo `.env` en la raíz:
 
 ```properties
-VITE_API_BASE_URL=https://<backend-url>/api/v1
+VITE_API_BASE_URL=(https://hackaton-20261-front-587720740455.us-east1.run.app)
 ```
 
 - En **local** es obligatoria, o el login fallará.
@@ -48,7 +47,7 @@ VITE_API_BASE_URL=https://<backend-url>/api/v1
 
 ## Deploy
 
-**Link del deploy:** <!-- pegar URL del deploy aquí -->
+**Link del deploy:** (https://hackaton-2-8f94.vercel.app/dashboard)
 
 El repositorio incluye configuración de **SPA rewrite** (`vercel.json`, `netlify.toml` y
 `public/_redirects`) para que **cualquier ruta** (`/dashboard`, `/signals`,
