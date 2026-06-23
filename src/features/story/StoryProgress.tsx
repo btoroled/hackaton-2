@@ -4,12 +4,11 @@ import { colorFor } from "./visualTokens";
 interface Props {
   stages: StoryStage[];
   active: number;
+  progress: number;
   onJump: (index: number) => void;
 }
 
-export function StoryProgress({ stages, active, onJump }: Props) {
-  const progress = stages.length > 1 ? active / (stages.length - 1) : 0;
-
+export function StoryProgress({ stages, active, progress, onJump }: Props) {
   return (
     <div className="w-full">
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">

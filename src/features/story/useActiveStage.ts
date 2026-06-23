@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface UseActiveStage {
   active: number;
+  progress: number;
   setActive: (index: number) => void;
   setRef: (index: number) => (el: HTMLElement | null) => void;
   scrollTo: (index: number) => void;
@@ -9,6 +10,7 @@ interface UseActiveStage {
 
 export function useActiveStage(count: number): UseActiveStage {
   const [active, setActive] = useState(0);
+  const [progress, setProgress] = useState(0);
   const refs = useRef<Array<HTMLElement | null>>([]);
 
   if (refs.current.length !== count) {
@@ -56,6 +58,44 @@ export function useActiveStage(count: number): UseActiveStage {
     return () => observer.disconnect();
   }, [count]);
 
+  // Progreso continuo 0..1: fraccion del recorrido (top de la primera etapa ->
+  // bottom de la ultima) que la linea central del viewport ha cruzado.
+  // Alimenta la barra de progreso para que avance suave con el scroll en vez
+  // de ir en escalones discretos por etapa activa.
+  useEffect(() => {
+    if (count === 0) return;
+    let raf = 0;
+
+    const compute = () => {
+      raf = 0;
+      const first = refs.current[0];
+      const last = refs.current[refs.current.length - 1];
+      if (!first || !last) return;
+      const viewportCenter = window.innerHeight / 2;
+      const firstTop = first.getBoundingClientRect().top;
+      const lastRect = last.getBoundingClientRect();
+      const lastBottom = lastRect.top + lastRect.height;
+      const total = lastBottom - firstTop;
+      if (total <= 0) return;
+      const passed = Math.max(0, Math.min(total, viewportCenter - firstTop));
+      setProgress(passed / total);
+    };
+
+    const schedule = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(compute);
+    };
+
+    compute();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [count]);
+
   const setRef = (index: number) => (el: HTMLElement | null) => {
     refs.current[index] = el;
   };
@@ -72,5 +112,5 @@ export function useActiveStage(count: number): UseActiveStage {
     });
   };
 
-  return { active, setActive, setRef, scrollTo };
+  return { active, progress, setActive, setRef, scrollTo };
 }
