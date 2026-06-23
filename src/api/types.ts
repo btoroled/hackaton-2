@@ -145,6 +145,35 @@ export interface SectorListResponse {
   items: SectorSummary[];
 }
 
+export interface StorySector {
+  id: string;
+  name: string;
+  climate: Climate;
+}
+
+export interface StageMetrics {
+  stability: number;
+  energy: number;
+  alerts: number;
+}
+
+export interface StoryStage {
+  id: string;
+  order: number;
+  title: string;
+  narrative: string;
+  dominantEvent: SignalType;
+  metrics: StageMetrics;
+  assetKey: string;
+  colorToken: string;
+  progress: number;
+}
+
+export interface SectorStoryResponse {
+  sector: StorySector;
+  stages: StoryStage[];
+}
+
 export interface ApiError {
   error: string;
   message: string;
